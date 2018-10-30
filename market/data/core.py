@@ -13,7 +13,7 @@ class GameObject(json.JSONEncoder):
     def __init__(self, name):
         super(GameObject, self).__init__()
         self.uuid = uuid4()
-        self.name = nameW
+        self.name = name
         self.__class__.REFERENCE_MAP[name] = self
 
     def default(self, o):
