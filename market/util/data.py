@@ -22,4 +22,4 @@ class Data:
             try:
                 loadable_class.marshal_load()
             except IOError:
-                print "No datafile found for class %s" % loadable_class
+                print("No datafile found for class %s" % loadable_class)

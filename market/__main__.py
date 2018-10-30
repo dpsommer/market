@@ -32,7 +32,7 @@ def main():
     Data.load()
     print(Item.REFERENCE_MAP)
     potion = Item.REFERENCE_MAP.get('Potion')
-    print potion.uuid
+    print(potion.uuid)
     drop = Resource.Drop(item=potion)
     monster = Monster('Slime', {drop: 60})
     adventurer = Adventurer('Isaac')

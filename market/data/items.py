@@ -1,4 +1,5 @@
 import os
+from functools import reduce
 
 from market.data.core import GameObject
 
