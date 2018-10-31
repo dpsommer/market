@@ -31,15 +31,13 @@ for thread in THREADS:
 def main():
     Data.load()
     print(Item.REFERENCE_MAP)
-    if 'Potion' in Item.REFERENCE_MAP:
-        potion = Item.REFERENCE_MAP.get('Potion')
-    else:
-        potion = Item(name='Potion')
+    potion = Item.get('Potion')
     print(potion.uuid)
     drop = Resource.Drop(item=potion)
-    monster = Monster(name='Slime', drop_table={drop: 60})
-    adventurer = Adventurer(name='Isaac')
-    adventurer.hunt(monster)
+    slime = Monster.get('Slime')
+    slime.add_drop(drop, rate=60)
+    adventurer = Adventurer.get('Isaac')
+    adventurer.hunt(slime)
     print(adventurer.inventory)
     Data.save()
 

@@ -30,7 +30,6 @@ class Inventory(dict):
         :param amount: amount to add
         :type amount: int
         """
-        # TODO: modify this so that multiple items can be added at once
         amount = self.get(item) + amount if item in self else amount
         self[item] = amount
 

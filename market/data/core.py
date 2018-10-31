@@ -16,6 +16,12 @@ class GameObject(object):
         self.__class__.REFERENCE_MAP[name] = self
 
     @classmethod
+    def get(cls, name):
+        if name in cls.REFERENCE_MAP:
+            return cls.REFERENCE_MAP[name]
+        return cls(name)
+
+    @classmethod
     def marshal_save(cls):
         with open(cls.MARSHAL_FILE_NAME, 'wb') as data_file:
             pickle.dump(cls.REFERENCE_MAP, data_file)
@@ -30,3 +36,9 @@ class GameObject(object):
 
     def __str__(self):
         return self.name  # TODO
+
+    def __hash__(self):
+        return hash(self.uuid)
+
+    def __eq__(self, o):
+        return self.uuid == o.uuid

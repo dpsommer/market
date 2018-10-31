@@ -33,6 +33,12 @@ class Resource(GameObject):
             self.lower_bound = lower_bound
             self.upper_bound = upper_bound
 
+        def __hash__(self):
+            return self.item.__hash__()
+
+        def __eq__(self, o):
+            return self.item == o.item
+
     class InvalidResourceType(Exception):
         pass
 
