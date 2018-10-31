@@ -6,8 +6,8 @@ from market.data.items import Inventory
 
 class Actor(GameObject):
 
-    def __init__(self, starting_gold=0, starting_inventory=None, **kwargs):
-        super(Actor, self).__init__(**kwargs)
+    def __init__(self, name, starting_gold=0, starting_inventory=None):
+        super(Actor, self).__init__(name)
         self.gold = starting_gold
         self.inventory = starting_inventory or Inventory()
 
@@ -46,8 +46,8 @@ class Adventurer(Actor):
     MARSHAL_FILE_NAME = os.path.join(os.path.dirname(__file__), 'adventurers.json')
     REFERENCE_MAP = {}
 
-    def __init__(self, **kwargs):
-        super(Adventurer, self).__init__(**kwargs)
+    def __init__(self, name):
+        super(Adventurer, self).__init__(name)
 
     def hunt(self, monster):
         # TODO: rather than passing in a monster object,

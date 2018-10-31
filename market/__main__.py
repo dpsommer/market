@@ -31,7 +31,10 @@ for thread in THREADS:
 def main():
     Data.load()
     print(Item.REFERENCE_MAP)
-    potion = Item.REFERENCE_MAP.get('Potion')
+    if 'Potion' in Item.REFERENCE_MAP:
+        potion = Item.REFERENCE_MAP.get('Potion')
+    else:
+        potion = Item(name='Potion')
     print(potion.uuid)
     drop = Resource.Drop(item=potion)
     monster = Monster(name='Slime', drop_table={drop: 60})

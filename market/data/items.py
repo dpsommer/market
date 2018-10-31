@@ -9,8 +9,8 @@ class Item(GameObject):
     MARSHAL_FILE_NAME = os.path.join(os.path.dirname(__file__), 'items.json')
     REFERENCE_MAP = {}
 
-    def __init__(self, **kwargs):
-        super(Item, self).__init__(**kwargs)
+    def __init__(self, name):
+        super(Item, self).__init__(name)
 
     class NoSuchItem(Exception):
         pass

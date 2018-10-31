@@ -8,8 +8,8 @@ class Resource(GameObject):
 
     DEFAULT_DROP_RATE = 50
 
-    def __init__(self, drop_table=None, **kwargs):
-        super(Resource, self).__init__(**kwargs)
+    def __init__(self, name, drop_table=None):
+        super(Resource, self).__init__(name)
         self.drop_table = drop_table or {}
 
     def generate_drops(self):
@@ -39,8 +39,8 @@ class Resource(GameObject):
 
 class Zone(GameObject):
 
-    def __init__(self, resources=None, **kwargs):
-        super(Zone, self).__init__(**kwargs)
+    def __init__(self, name, resources=None):
+        super(Zone, self).__init__(name)
         self.resources = resources or {}
 
     def add_resource(self, resource):
@@ -51,6 +51,3 @@ class Monster(Resource):
 
     MARSHAL_FILE_NAME = os.path.join(os.path.dirname(__file__), 'monsters.json')
     REFERENCE_MAP = {}
-
-    def __init__(self, **kwargs):
-        super(Monster, self).__init__(**kwargs)

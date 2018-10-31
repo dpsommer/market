@@ -14,7 +14,7 @@ class Data:
     @staticmethod
     def save():
         for loadable_class in Data.LOADABLE_CLASSES:
-            loadable_class.marshal_save(loadable_class.REFERENCE_MAP)
+            loadable_class.marshal_save()
 
     @staticmethod
     def load():
