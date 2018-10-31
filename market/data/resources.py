@@ -6,9 +6,11 @@ from market.data.core import GameObject
 
 class Resource(GameObject):
 
-    def __init__(self, name, drop_table):
-        super(Resource, self).__init__(name)
-        self.drop_table = drop_table
+    DEFAULT_DROP_RATE = 50
+
+    def __init__(self, drop_table=None, **kwargs):
+        super(Resource, self).__init__(**kwargs)
+        self.drop_table = drop_table or {}
 
     def generate_drops(self):
         drops = {}
@@ -16,6 +18,12 @@ class Resource(GameObject):
             if round(uniform(0, 100), Resource.Drop.DECIMAL_PLACES) <= rate:
                 drops[drop.item] = randint(drop.lower_bound, drop.upper_bound)
         return drops
+
+    def update_drop_table(self, drops):
+        self.drop_table.update(drops)
+
+    def add_drop(self, drop, rate=DEFAULT_DROP_RATE):
+        self.drop_table[drop] = rate
 
     class Drop:
         DECIMAL_PLACES = 3
@@ -31,9 +39,9 @@ class Resource(GameObject):
 
 class Zone(GameObject):
 
-    def __init__(self, name):
-        super(Zone, self).__init__(name)
-        self.resources = {}
+    def __init__(self, resources=None, **kwargs):
+        super(Zone, self).__init__(**kwargs)
+        self.resources = resources or {}
 
     def add_resource(self, resource):
         self.resources[resource.name] = resource
@@ -42,6 +50,7 @@ class Zone(GameObject):
 class Monster(Resource):
 
     MARSHAL_FILE_NAME = os.path.join(os.path.dirname(__file__), 'monsters.json')
+    REFERENCE_MAP = {}
 
-    def __init__(self, name, drop_table):
-        super(Monster, self).__init__(name, drop_table)
+    def __init__(self, **kwargs):
+        super(Monster, self).__init__(**kwargs)
