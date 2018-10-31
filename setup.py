@@ -4,6 +4,7 @@ import os
 from setuptools import setup, find_packages
 
 DATA_DIR = 'market%sdata' % os.path.sep
+TEST_MODULE = 'market.test'
 PICKLE_EXTENSION = '.p'
 
 data_files = [f for dir_path, dir_name, file_names in os.walk(DATA_DIR) for f in file_names]
@@ -18,4 +19,5 @@ setup(name='market',
               'market = market.__main__:main'
           ]
       },
+      test_suite=TEST_MODULE
       )

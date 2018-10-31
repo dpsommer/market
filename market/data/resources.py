@@ -34,7 +34,7 @@ class Resource(GameObject):
             self.upper_bound = upper_bound
 
         def __hash__(self):
-            return self.item.__hash__()
+            return self.item.__hash__()  # XXX: should drops with different bounds be equal?
 
         def __eq__(self, o):
             return self.item == o.item

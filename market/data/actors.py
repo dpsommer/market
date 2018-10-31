@@ -24,6 +24,9 @@ class Actor(GameObject):
         self.inventory[item] -= amount
         self.gold += price * amount
 
+    def add_to_inventory(self, item, amount):
+        self.inventory.add(item, amount)
+
     class NotEnoughGold(Exception):
         pass
 

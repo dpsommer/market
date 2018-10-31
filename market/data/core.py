@@ -2,10 +2,11 @@ import pickle
 from uuid import uuid4
 
 
-##
-# Base game class. Handles core functionality and object marshalling
-##
 class GameObject(object):
+    """
+    Base game class. Handles core functionality and object marshalling.
+    """
+
     MARSHAL_FILE_NAME = ''
     REFERENCE_MAP = {}
 
@@ -35,7 +36,7 @@ class GameObject(object):
                 return  # if file is empty
 
     def __str__(self):
-        return self.name  # TODO
+        return self.name
 
     def __hash__(self):
         return hash(self.uuid)
