@@ -2,30 +2,6 @@ from market.data.items import Item
 from market.util.data import Data
 from market.data.resources import Resource, Monster
 from market.data.actors import Adventurer
-import threading
-
-THREADS = []
-
-
-class T(threading.Thread):
-
-    def __init__(self):
-        super(T, self).__init__()
-
-    def run(self):
-        super(T, self).run()
-        while True:
-            pass
-    
-    def join(self, timeout=None):
-        # TODO: marshal objects
-        super(T, self).join(timeout)
-
-for thread in THREADS:
-    thread.run()
-
-for thread in THREADS:
-    thread.join()
 
 
 def main():
