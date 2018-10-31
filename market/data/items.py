@@ -6,7 +6,7 @@ from market.data.core import GameObject
 
 class Item(GameObject):
 
-    MARSHAL_FILE_NAME = os.path.join(os.path.dirname(__file__), 'items.json')
+    MARSHAL_FILE_NAME = os.path.join(os.path.dirname(__file__), 'items.p')
     REFERENCE_MAP = {}
 
     def __init__(self, name):

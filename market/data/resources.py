@@ -49,5 +49,5 @@ class Zone(GameObject):
 
 class Monster(Resource):
 
-    MARSHAL_FILE_NAME = os.path.join(os.path.dirname(__file__), 'monsters.json')
+    MARSHAL_FILE_NAME = os.path.join(os.path.dirname(__file__), 'monsters.p')
     REFERENCE_MAP = {}
