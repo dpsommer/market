@@ -5,7 +5,7 @@ import pkgutil
 import pyclbr
 
 from market import data as data_module
-from market.data.core import GameObject, GAME_DATA
+from market.data.core import GameObject, GAME_STATE
 
 
 def find_loadable_classes(package):
@@ -62,12 +62,12 @@ class MockData:
     @staticmethod
     def save():
         for cls, stream in MockData.DATA_STREAMS.items():
-            pickle.dump(GAME_DATA[cls.__name__], stream)
+            pickle.dump(GAME_STATE[cls.__name__], stream)
 
     @staticmethod
     def load():
         for cls, stream in MockData.DATA_STREAMS.items():
             try:
-                GAME_DATA[cls.__name__] = pickle.load(stream)
+                GAME_STATE[cls.__name__] = pickle.load(stream)
             except EOFError:
                 pass
