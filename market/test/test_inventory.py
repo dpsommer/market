@@ -21,7 +21,18 @@ class TestInventory(unittest.TestCase):
         MockData.load()
         self.adventurer = Adventurer.get('John Doe')
         self.adventurer.add_to_inventory(self.test_item, 1)
-        assert self.adventurer.inventory.get(self.test_item) is 2
+        assert self.adventurer.get_inventory().get(self.test_item) is 2
+
+    def test_bulk_update(self):
+        self.adventurer.add_to_inventory(self.test_item, 1)
+        potion = Item.get('Potion')
+        items = {self.test_item: 3, potion: 2}
+        self.adventurer.update_inventory(items)
+        inventory = self.adventurer.get_inventory()
+        assert inventory.get(self.test_item) is 4 and inventory.get(potion) is 2
+
+    def tearDown(self):
+        self.adventurer.clear_inventory()
 
 if __name__ == "__main__":
     unittest.main()
