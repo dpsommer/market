@@ -1,5 +1,4 @@
 from random import randint, uniform
-import os
 
 from market.data.core import GameObject
 
@@ -55,5 +54,4 @@ class Zone(GameObject):
 
 class Monster(Resource):
 
-    MARSHAL_FILE_NAME = os.path.join(os.path.dirname(__file__), 'monsters.p')
     REFERENCE_MAP = {}

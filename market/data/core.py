@@ -1,3 +1,4 @@
+import os
 import pickle
 from uuid import uuid4
 
@@ -5,9 +6,11 @@ from uuid import uuid4
 class GameObject(object):
     """
     Base game class. Handles core functionality and object marshalling.
+
+    Each pickleable subclass of GameObject must explicitly define MARSHAL_FILE_NAME
+    and REFERENCE_MAP for marshalling to work.
     """
 
-    MARSHAL_FILE_NAME = ''
     REFERENCE_MAP = {}
 
     def __init__(self, name, uuid=None):
@@ -24,12 +27,12 @@ class GameObject(object):
 
     @classmethod
     def marshal_save(cls):
-        with open(cls.MARSHAL_FILE_NAME, 'wb') as data_file:
+        with open(os.path.join(os.path.dirname(__file__), '%s.p' % cls.__name__), 'wb') as data_file:
             pickle.dump(cls.REFERENCE_MAP, data_file)
 
     @classmethod
     def marshal_load(cls):
-        with open(cls.MARSHAL_FILE_NAME, 'rb') as data_file:
+        with open(os.path.join(os.path.dirname(__file__), '%s.p' % cls.__name__), 'rb') as data_file:
             try:
                 cls.REFERENCE_MAP = pickle.load(data_file)
             except EOFError:

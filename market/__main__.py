@@ -14,7 +14,7 @@ def main():
     slime.add_drop(drop, rate=60)
     adventurer = Adventurer.get('Isaac')
     adventurer.hunt(slime)
-    print(adventurer.inventory)
+    print(adventurer.get_inventory())
     Data.save()
 
 

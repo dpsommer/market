@@ -1,5 +1,4 @@
 import copy
-import os
 
 from market.data.core import GameObject
 from market.data.items import Inventory
@@ -56,7 +55,6 @@ class Merchant(Actor):
 
 class Adventurer(Actor):
 
-    MARSHAL_FILE_NAME = os.path.join(os.path.dirname(__file__), 'adventurers.p')
     REFERENCE_MAP = {}
 
     def __init__(self, name):

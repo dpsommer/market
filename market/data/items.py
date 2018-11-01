@@ -1,4 +1,3 @@
-import os
 from functools import reduce
 
 from market.data.core import GameObject
@@ -6,7 +5,6 @@ from market.data.core import GameObject
 
 class Item(GameObject):
 
-    MARSHAL_FILE_NAME = os.path.join(os.path.dirname(__file__), 'items.p')
     REFERENCE_MAP = {}
 
     def __init__(self, name):
@@ -36,7 +34,6 @@ class Inventory(dict):
     def update(self, E=None, **F):
         """
         Override the inbuilt dict update function to add to existing item totals.
-        Functionality copied from the superclass function
 
         :param E: dict/iterable used to update the inventory
         :param F: optional k/v pairs
