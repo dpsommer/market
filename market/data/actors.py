@@ -1,6 +1,6 @@
 import copy
 
-from market.data.core import GameObject
+from market.data.core import GameObject, loadable
 from market.data.items import Inventory
 
 
@@ -53,9 +53,8 @@ class Merchant(Actor):
         return self.price_list
 
 
+@loadable
 class Adventurer(Actor):
-
-    REFERENCE_MAP = {}
 
     def __init__(self, name):
         super(Adventurer, self).__init__(name)

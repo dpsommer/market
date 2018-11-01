@@ -1,6 +1,6 @@
 from random import randint, uniform
 
-from market.data.core import GameObject
+from market.data.core import GameObject, loadable
 
 
 class Resource(GameObject):
@@ -9,20 +9,20 @@ class Resource(GameObject):
 
     def __init__(self, name, drop_table=None):
         super(Resource, self).__init__(name)
-        self.drop_table = drop_table or {}
+        self._drop_table = drop_table or {}
 
     def generate_drops(self):
         drops = {}
-        for drop, rate in self.drop_table.items():
+        for drop, rate in self._drop_table.items():
             if round(uniform(0, 100), Resource.Drop.DECIMAL_PLACES) <= rate:
                 drops[drop.item] = randint(drop.lower_bound, drop.upper_bound)
         return drops
 
     def update_drop_table(self, drops):
-        self.drop_table.update(drops)
+        self._drop_table.update(drops)
 
     def add_drop(self, drop, rate=DEFAULT_DROP_RATE):
-        self.drop_table[drop] = rate
+        self._drop_table[drop] = rate
 
     class Drop:
         DECIMAL_PLACES = 3
@@ -52,6 +52,6 @@ class Zone(GameObject):
         self.resources[resource.name] = resource
 
 
+@loadable
 class Monster(Resource):
-
-    REFERENCE_MAP = {}
+    pass

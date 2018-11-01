@@ -3,40 +3,51 @@ import pickle
 from uuid import uuid4
 
 
-class GameObject(object):
-    """
-    Base game class. Handles core functionality and object marshalling.
+GAME_DATA = {}
 
-    Each pickleable subclass of GameObject must explicitly define MARSHAL_FILE_NAME
-    and REFERENCE_MAP for marshalling to work.
+
+def loadable(cls):
+    cls.is_loadable = True
+    return cls
+
+
+class GameObject:
+    """
+    Base game class. Handles core functionality and object marshalling using pickle.
+
+    XXX: all the calls to .__name__ here are ugly
     """
 
-    REFERENCE_MAP = {}
+    is_loadable = False
 
     def __init__(self, name, uuid=None):
-        super(GameObject, self).__init__()
         self.name = name
         self.uuid = uuid or uuid4()
-        self.__class__.REFERENCE_MAP[name] = self
+        class_name = self.__class__.__name__
+        if class_name not in GAME_DATA:
+            GAME_DATA[class_name] = {}
+        GAME_DATA[self.__class__.__name__][name] = self
 
     @classmethod
     def get(cls, name):
-        if name in cls.REFERENCE_MAP:
-            return cls.REFERENCE_MAP[name]
+        if cls.__name__ not in GAME_DATA:
+            GAME_DATA[cls.__name__] = {}
+        if name in GAME_DATA[cls.__name__]:
+            return GAME_DATA[cls.__name__][name]
         return cls(name)
 
     @classmethod
     def marshal_save(cls):
         with open(os.path.join(os.path.dirname(__file__), '%s.p' % cls.__name__), 'wb') as data_file:
-            pickle.dump(cls.REFERENCE_MAP, data_file)
+            pickle.dump(GAME_DATA[cls.__name__], data_file)
 
     @classmethod
     def marshal_load(cls):
         with open(os.path.join(os.path.dirname(__file__), '%s.p' % cls.__name__), 'rb') as data_file:
             try:
-                cls.REFERENCE_MAP = pickle.load(data_file)
+                GAME_DATA[cls.__name__] = pickle.load(data_file)
             except EOFError:
-                return  # if file is empty
+                pass  # if file is empty
 
     def __str__(self):
         return self.name

@@ -1,11 +1,10 @@
 from functools import reduce
 
-from market.data.core import GameObject
+from market.data.core import GameObject, loadable
 
 
+@loadable
 class Item(GameObject):
-
-    REFERENCE_MAP = {}
 
     def __init__(self, name):
         super(Item, self).__init__(name)
@@ -21,7 +20,7 @@ class Inventory(dict):
 
     def add(self, item, amount):
         """
-        Add some number of an item to the inventory
+        Add some number of an item to the inventory.
 
         :param item: the item to add
         :type item: Item

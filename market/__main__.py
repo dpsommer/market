@@ -1,3 +1,6 @@
+import pprint
+
+from market.data.core import GAME_DATA
 from market.data.items import Item
 from market.util.data import Data
 from market.data.resources import Resource, Monster
@@ -6,7 +9,7 @@ from market.data.actors import Adventurer
 
 def main():
     Data.load()
-    print(Item.REFERENCE_MAP)
+    pprint.pprint(GAME_DATA)
     potion = Item.get('Potion')
     print(potion.uuid)
     drop = Resource.Drop(item=potion)
