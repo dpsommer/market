@@ -12,6 +12,12 @@ pickle_files = [os.path.join(DATA_DIR, f) for f in filter(lambda x: x.endswith(P
 
 setup(name='market',
       version='0.0.1',
+      author='Duncan Sommerville',
+      author_email='duncan.sommerville@gmail.com',
+      description='RPG-esque market simulation',
+      license='MIT',
+      url='https://github.com/dpsommer/market',
+      platforms='linux',
       packages=find_packages(),
       data_files=[(DATA_DIR, pickle_files)],
       entry_points={
