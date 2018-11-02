@@ -10,4 +10,3 @@ To install, run the following:
 $ python ./setup.py test
 $ python ./setup.py install
 ```
-
