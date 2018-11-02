@@ -2,7 +2,6 @@ import os
 import pickle
 from uuid import uuid4
 
-
 GAME_STATE = {}
 
 
@@ -36,10 +35,10 @@ class GameObject:
         GAME_STATE[self.__class__][name] = self
 
     @classmethod
-    def get(cls, name):
+    def get(cls, name, **kwargs):
         if name in GAME_STATE[cls]:
             return GAME_STATE[cls][name]
-        return cls(name)
+        return cls(name, **kwargs)
 
     @classmethod
     def marshal_save(cls):

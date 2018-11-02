@@ -4,7 +4,6 @@ from market.data.core import GameObject, loadable
 
 
 class Resource(GameObject):
-
     DEFAULT_DROP_RATE = 50
 
     def __init__(self, name, drop_table=None):
@@ -43,7 +42,6 @@ class Resource(GameObject):
 
 
 class Zone(GameObject):
-
     def __init__(self, name, resources=None):
         super(Zone, self).__init__(name)
         self.resources = resources or {}
@@ -54,4 +52,5 @@ class Zone(GameObject):
 
 @loadable
 class Monster(Resource):
-    pass
+    def __init__(self, name, **kwargs):
+        super(Monster, self).__init__(name, **kwargs)

@@ -5,7 +5,6 @@ from market.data.core import GAME_STATE
 
 
 class Data:
-
     LOADABLE_CLASSES = GAME_STATE.keys()
 
     @staticmethod
