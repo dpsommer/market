@@ -70,8 +70,9 @@ class Inventory(dict):
         super(Inventory, self).__setitem__(key, value)
         if value == 0:
             self.pop(key)
-        if self.callback and callable(self.callback):
-            self.callback()
+        callback = getattr(self, 'callback', None)
+        if callback and callable(callback):
+            callback()
 
     def __str__(self):
         return reduce(lambda x, y: "%s\t%s: %s\n" % (x, y.name, self[y]), self, "{\n") + "}"
