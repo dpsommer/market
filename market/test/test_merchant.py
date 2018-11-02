@@ -5,7 +5,7 @@ from market.data.actors import Actor, Adventurer, Merchant
 from market.util.data import MockData
 
 
-class TestInventory(unittest.TestCase):
+class TestMerchant(unittest.TestCase):
     def setUp(self):
         self.test_item = Item.get('Test Item')
         self.adventurer = Adventurer.get('John Doe')

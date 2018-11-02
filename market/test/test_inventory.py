@@ -15,7 +15,7 @@ class TestInventory(unittest.TestCase):
         This test does several things:
             1) ensures the inventory is persisted after a marshal save/load
             2) ensures the .get() method for GameObject instances successfully
-                returns the correct object after marshalling by reassigning adventurer
+                returns the same object after marshalling by reassigning adventurer
             3) ensures that an object held in memory matches marshaled objects
                 post-load by retaining the same value for test_item
         """
