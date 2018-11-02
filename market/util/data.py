@@ -42,3 +42,10 @@ class MockData:
                 GAME_STATE[cls] = pickle.load(stream)
             except EOFError:
                 pass
+
+    @staticmethod
+    def clear():
+        for cls, stream in MockData.DATA_STREAMS.items():
+            stream.truncate()
+        for k in GAME_STATE.keys():
+            GAME_STATE[k] = {}

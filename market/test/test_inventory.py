@@ -7,10 +7,6 @@ from market.util.data import MockData
 
 class TestInventory(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        MockData.load()
-
     def setUp(self):
         self.test_item = Item.get('Test Item')
         self.adventurer = Adventurer.get('John Doe')
@@ -45,7 +41,8 @@ class TestInventory(unittest.TestCase):
         assert inventory.get(self.test_item) is 4 and inventory.get(potion) is 2
 
     def tearDown(self):
-        self.adventurer.clear_inventory()
+        MockData.clear()
+
 
 if __name__ == "__main__":
     unittest.main()
