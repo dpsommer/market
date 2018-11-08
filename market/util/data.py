@@ -1,24 +1,34 @@
 import io
 import pickle
+import random
 
-from market.data.core import GAME_STATE
+SIMULATION_STATE = {}
 
 
 class Data:
-    LOADABLE_CLASSES = GAME_STATE.keys()
+    LOADABLE_CLASSES = SIMULATION_STATE.keys()
 
     @staticmethod
     def save():
+        # TODO: pickle random state
         for loadable_class in Data.LOADABLE_CLASSES:
-            loadable_class.marshal_save()
+            with open(loadable_class.state_file_path(), 'wb') as data_file:
+                pickle.dump(loadable_class.get_state(), data_file)
 
     @staticmethod
     def load():
         for loadable_class in Data.LOADABLE_CLASSES:
             try:
-                loadable_class.marshal_load()
+                with open(loadable_class.state_file_path(), 'rb') as data_file:
+                    loadable_class.set_state(pickle.load(data_file))
+            except EOFError:
+                pass  # if file is empty
             except IOError:
                 print("No datafile found for class: %s" % loadable_class.__name__)
+
+    @staticmethod
+    def generate():
+        pass  # TODO: also need to pickle random state
 
 
 class MockData:
@@ -28,17 +38,18 @@ class MockData:
     Uses in-memory data streams to hold pickled objects rather than flatfiles.
     """
     DATA_STREAMS = {cls: io.BytesIO() for cls in Data.LOADABLE_CLASSES}
+    SEED = 'mock data'
 
     @staticmethod
     def save():
         for cls, stream in MockData.DATA_STREAMS.items():
-            pickle.dump(GAME_STATE[cls], stream)
+            pickle.dump(SIMULATION_STATE[cls], stream)
 
     @staticmethod
     def load():
         for cls, stream in MockData.DATA_STREAMS.items():
             try:
-                GAME_STATE[cls] = pickle.load(stream)
+                SIMULATION_STATE[cls] = pickle.load(stream)
             except EOFError:
                 pass
 
@@ -46,5 +57,10 @@ class MockData:
     def clear():
         for cls, stream in MockData.DATA_STREAMS.items():
             stream.truncate()
-        for k in GAME_STATE.keys():
-            GAME_STATE[k] = {}
+        for k in SIMULATION_STATE.keys():
+            SIMULATION_STATE[k] = {}
+
+    @staticmethod
+    def generate():
+        random.seed = MockData.SEED
+        Data.generate()

@@ -1,14 +1,14 @@
 import unittest
 
 from market.data.items import Item
-from market.data.actors import Adventurer
+from market.data.actors import Actor
 from market.util.data import MockData
 
 
 class TestInventory(unittest.TestCase):
     def setUp(self):
         self.test_item = Item.get('Test Item')
-        self.adventurer = Adventurer.get('John Doe')
+        self.adventurer = Actor.get('John Doe')
 
     def test_inventory_persistence(self):
         """
@@ -22,7 +22,7 @@ class TestInventory(unittest.TestCase):
         self.adventurer.add_to_inventory(self.test_item)
         MockData.save()
         MockData.load()
-        self.adventurer = Adventurer.get('John Doe')
+        self.adventurer = Actor.get('John Doe')
         self.adventurer.add_to_inventory(self.test_item)
         assert self.adventurer.get_inventory().get(self.test_item) is 2
 

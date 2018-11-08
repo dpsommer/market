@@ -1,8 +1,7 @@
 import os
-import pickle
 from uuid import uuid4
 
-GAME_STATE = {}
+from market.util.data import SIMULATION_STATE
 
 
 def loadable(cls):
@@ -18,13 +17,13 @@ def loadable(cls):
     :rtype: class[GameObject]
     """
     cls.is_loadable = True
-    GAME_STATE[cls] = {}
+    SIMULATION_STATE[cls] = {}
     return cls
 
 
-class GameObject:
+class SimulatedObject:
     """
-    Base game class. Handles core functionality and object marshalling using pickle.
+    Base simulation class. Defines core functionality and class-level methods.
     """
 
     is_loadable = False
@@ -32,26 +31,25 @@ class GameObject:
     def __init__(self, name, uuid=None):
         self.name = name
         self.uuid = uuid or uuid4()
-        GAME_STATE[self.__class__][name] = self
+        SIMULATION_STATE[self.__class__][name] = self
 
     @classmethod
     def get(cls, name, **kwargs):
-        if name in GAME_STATE[cls]:
-            return GAME_STATE[cls][name]
+        if name in SIMULATION_STATE[cls]:
+            return SIMULATION_STATE[cls][name]
         return cls(name, **kwargs)
 
     @classmethod
-    def marshal_save(cls):
-        with open(os.path.join(os.path.dirname(__file__), '%s.p' % cls.__name__), 'wb') as data_file:
-            pickle.dump(GAME_STATE[cls], data_file)
+    def get_state(cls):
+        return SIMULATION_STATE[cls]
 
     @classmethod
-    def marshal_load(cls):
-        with open(os.path.join(os.path.dirname(__file__), '%s.p' % cls.__name__), 'rb') as data_file:
-            try:
-                GAME_STATE[cls] = pickle.load(data_file)
-            except EOFError:
-                pass  # if file is empty
+    def set_state(cls, state):
+        SIMULATION_STATE[cls] = state
+
+    @classmethod
+    def state_file_path(cls):
+        return os.path.join(os.path.dirname(__file__), '%s.p' % cls.__name__)
 
     def __str__(self):
         return self.name

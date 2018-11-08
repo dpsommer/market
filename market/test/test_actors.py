@@ -1,20 +1,19 @@
 import unittest
 
 from market.data.items import Item, Inventory
-from market.data.actors import Actor, Adventurer, Merchant
+from market.data.actors import Actor
 from market.util.data import MockData
 
 
-class TestMerchant(unittest.TestCase):
+class TestActors(unittest.TestCase):
     def setUp(self):
         self.test_item = Item.get('Test Item')
-        self.adventurer = Adventurer.get('John Doe')
-        self.merchant = Merchant.get('Item Shop', buy_list={self.test_item: 100}, starting_gold=100)
+        self.adventurer = Actor.get('John Doe')
+        self.merchant = Actor.get('Item Shop', buy_list={self.test_item: 100}, starting_gold=100)
 
     def test_sell_item(self):
         """
-        Tests basic sell functionality and that the merchant's prices are updated
-        when their inventory changes.
+        Tests basic sell functionality.
         """
         self.adventurer.add_to_inventory(self.test_item)
         self.adventurer.sell(
@@ -22,7 +21,7 @@ class TestMerchant(unittest.TestCase):
             item=self.test_item,
             price=self.merchant.get_buy_list()[self.test_item]
         )
-        assert self.merchant.get_prices()[self.test_item]
+        assert self.merchant.get_inventory()[self.test_item]
 
     def test_not_enough_gold(self):
         """

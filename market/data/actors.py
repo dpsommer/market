@@ -1,14 +1,38 @@
 import copy
 
-from market.data.core import GameObject, loadable
+from market.data.core import SimulatedObject, loadable
 from market.data.items import Item, Inventory
+from market.data.resources import Resource, Zone
 
 
-class Actor(GameObject):
-    def __init__(self, name, starting_gold=0, starting_inventory=None):
+@loadable
+class Actor(SimulatedObject):
+    def __init__(self, name, starting_gold=0, starting_inventory=None, buy_list=None):
         super(Actor, self).__init__(name)
         self._gold = starting_gold
-        self._inventory = starting_inventory or Inventory()
+        self._inventory = starting_inventory or Inventory(callback=self.prioritize_buy_list)
+        self._buy_list = buy_list or {}
+
+    def gather(self, resource):
+        """
+
+        :param resource:
+        :type resource: Resource
+        """
+        drops = resource.generate_drops()
+        for drop, amount in drops.items():
+            self._inventory.add(drop, amount)
+
+    def gather_from_zone(self, zone):
+        """
+
+        :param zone:
+        :type zone: Zone
+        """
+        for resource, amount in zone.get_resources().items():
+            for _ in range(amount):
+                self.gather(resource)
+                zone.remove_resource(resource)
 
     def buy(self, seller, item, price, amount=1):
         """
@@ -37,6 +61,9 @@ class Actor(GameObject):
     def sell(self, buyer, item, price, amount=1):
         buyer.buy(self, item, price, amount)
 
+    def prioritize_buy_list(self):
+        pass  # TODO: update buy list based on inventory contents
+
     def add_gold(self, amount):
         self._gold += amount
 
@@ -63,48 +90,14 @@ class Actor(GameObject):
     def get_inventory(self):
         return copy.deepcopy(self._inventory)
 
-    class NotEnoughGold(Exception):
-        pass
-
-
-@loadable
-class Merchant(Actor):
-    def __init__(self, name, buy_list=None, markup=1.5, **kwargs):
-        super(Merchant, self).__init__(name, **kwargs)
-        self._inventory.callback = self._update_price_list
-        self._buy_list = buy_list or {}
-        self._markup = markup
-        self._price_list = {}
-        self._update_price_list()
-
-    def _determine_sale_price(self, item):
-        # FIXME: naive initial implementation - if the item exists in the buylist simply apply a flat markup
-        if item in self._buy_list:
-            return self._buy_list.get(item) * self._markup
-        return 0  # FIXME
-
-    def _update_price_list(self):
-        self._price_list = {item: self._determine_sale_price(item) for item in self._inventory.keys()}
-
     def add_to_buy_list(self, item, price):
         self._buy_list.add(item, price)
+
+    def remove_from_buy_list(self, item):
+        self._buy_list.pop(item)
 
     def get_buy_list(self):
         return copy.deepcopy(self._buy_list)
 
-    def get_prices(self):
-        return copy.deepcopy(self._price_list)
-
-
-@loadable
-class Adventurer(Actor):
-    def __init__(self, name, **kwargs):
-        super(Adventurer, self).__init__(name, **kwargs)
-
-    def hunt(self, monster):
-        # TODO: rather than passing in a monster object,
-        #   this function should accept a hunting 'zone'
-        #   and determine monsters to hunt based on that
-        drops = monster.generate_drops()
-        for drop, amount in drops.items():
-            self._inventory.add(drop, amount)
+    class NotEnoughGold(Exception):
+        pass

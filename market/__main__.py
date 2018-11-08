@@ -1,22 +1,22 @@
 import pprint
 
-from market.data.core import GAME_STATE
+from market.util.data import SIMULATION_STATE
 from market.data.items import Item
 from market.util.data import Data
-from market.data.resources import Resource, Monster
-from market.data.actors import Adventurer
+from market.data.resources import Resource
+from market.data.actors import Actor
 
 
 def main():
     Data.load()
-    pprint.pprint(GAME_STATE)
+    pprint.pprint(SIMULATION_STATE)
     potion = Item.get('Potion')
     print(potion.uuid)
     drop = Resource.Drop(item=potion)
-    slime = Monster.get('Slime')
+    slime = Resource.get('Slime')
     slime.add_drop(drop, rate=60)
-    adventurer = Adventurer.get('Isaac')
-    adventurer.hunt(slime)
+    adventurer = Actor.get('Isaac')
+    adventurer.gather(slime)
     print(adventurer.get_inventory())
     Data.save()
 

@@ -1,10 +1,10 @@
 from functools import reduce
 
-from market.data.core import GameObject, loadable
+from market.data.core import SimulatedObject, loadable
 
 
 @loadable
-class Item(GameObject):
+class Item(SimulatedObject):
     def __init__(self, name):
         super(Item, self).__init__(name)
 
@@ -14,8 +14,7 @@ class Item(GameObject):
 
 class Inventory(dict):
     def __init__(self, *args, **kwargs):
-        self.callback = kwargs['callback'] if 'callback' in kwargs else None
-        kwargs.pop('callback', None)
+        self.callback = kwargs.pop('callback') if 'callback' in kwargs else lambda *x: x
         super(Inventory, self).__init__(*args, **kwargs)
 
     def add(self, item, amount):
@@ -70,9 +69,8 @@ class Inventory(dict):
         super(Inventory, self).__setitem__(key, value)
         if value == 0:
             self.pop(key)
-        callback = getattr(self, 'callback', None)
-        if callback and callable(callback):
-            callback()
+        if callable(self.callback):
+            self.callback()
 
     def __str__(self):
         return reduce(lambda x, y: "%s\t%s: %s\n" % (x, y.name, self[y]), self, "{\n") + "}"

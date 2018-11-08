@@ -1,9 +1,11 @@
+import copy
 from random import randint, uniform
 
-from market.data.core import GameObject, loadable
+from market.data.core import SimulatedObject, loadable
 
 
-class Resource(GameObject):
+@loadable
+class Resource(SimulatedObject):
     DEFAULT_DROP_RATE = 50
 
     def __init__(self, name, drop_table=None):
@@ -70,16 +72,17 @@ class Resource(GameObject):
         pass
 
 
-class Zone(GameObject):
+@loadable
+class Zone(SimulatedObject):
     def __init__(self, name, resources=None):
         super(Zone, self).__init__(name)
-        self.resources = resources or {}
+        self._resources = resources or {}
 
-    def add_resource(self, resource):
-        self.resources[resource.name] = resource
+    def add_resource(self, resource, amount=1):
+        self._resources[resource] = amount
 
+    def remove_resource(self, resource):
+        self._resources.pop(resource)
 
-@loadable
-class Monster(Resource):
-    def __init__(self, name, **kwargs):
-        super(Monster, self).__init__(name, **kwargs)
+    def get_resources(self):
+        return copy.deepcopy(self._resources)
