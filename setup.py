@@ -22,7 +22,7 @@ setup(name='market',
       data_files=[(DATA_DIR, pickle_files)],
       entry_points={
           'console_scripts': [
-              'market = market.__main__:main'
+              'market = market.__main__:run'
           ]
       },
       test_suite=TEST_MODULE
