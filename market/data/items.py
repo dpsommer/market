@@ -6,7 +6,7 @@ from market.data.core import SimulatedObject, loadable
 @loadable
 class Item(SimulatedObject):
     def __init__(self, name):
-        super(Item, self).__init__(name)
+        super().__init__(name)
 
     class NoSuchItem(Exception):
         pass
@@ -14,8 +14,7 @@ class Item(SimulatedObject):
 
 class Inventory(dict):
     def __init__(self, *args, **kwargs):
-        self.callback = kwargs.pop('callback') if 'callback' in kwargs else lambda *x: x
-        super(Inventory, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def add(self, item, amount):
         """
@@ -61,7 +60,7 @@ class Inventory(dict):
 
     def __setitem__(self, key, value):
         """
-        Override __setitem__ to invoke an onchange callback.
+        Override __setitem__ to remove entries when their total reaches 0.
 
         :type key: Item
         :type value: int
@@ -69,8 +68,6 @@ class Inventory(dict):
         super(Inventory, self).__setitem__(key, value)
         if value == 0:
             self.pop(key)
-        if callable(self.callback):
-            self.callback()
 
     def __str__(self):
         return reduce(lambda x, y: "%s\t%s: %s\n" % (x, y.name, self[y]), self, "{\n") + "}"

@@ -10,7 +10,7 @@ class Actor(SimulatedObject):
     def __init__(self, name, starting_gold=0, starting_inventory=None, buy_list=None):
         super(Actor, self).__init__(name)
         self._gold = starting_gold
-        self._inventory = starting_inventory or Inventory(callback=self.prioritize_buy_list)
+        self._inventory = starting_inventory or Inventory()
         self._buy_list = buy_list or {}
 
     def gather(self, resource):
