@@ -12,9 +12,9 @@ def loadable(cls):
     As a side-effect, adds the calling class the global GAME_STATE dict for simplicity.
 
     :param cls: the class being decorated
-    :type cls: class[GameObject]
+    :type cls: class[SimulatedObject]
     :return: the decorated class
-    :rtype: class[GameObject]
+    :rtype: class[SimulatedObject]
     """
     cls.is_loadable = True
     SIMULATION_STATE[cls] = {}
