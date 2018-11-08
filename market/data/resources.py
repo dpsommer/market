@@ -33,6 +33,9 @@ class Resource(SimulatedObject):
         """
         self._drop_table[drop] = rate
 
+    def get_drop_table(self):
+        return copy.deepcopy(self._drop_table)
+
     class Drop:
         DECIMAL_PLACES = 3
 
@@ -56,7 +59,7 @@ class Resource(SimulatedObject):
             Equality comparisons for drops should check the represented item
             and both upper and lower bounds for drop amounts.
 
-            Item objects, like all GameObjects, are compared by UUID.
+            Item objects, like all SimulatedObjects, are compared by UUID.
 
             :param o: the drop to compare against
             :type o: Resource.Drop
