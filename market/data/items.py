@@ -1,10 +1,11 @@
 from functools import reduce
 
-from market.data.core import SimulatedObject, loadable
+from market.core import SimulatedObject, loadable
 
 
 @loadable
 class Item(SimulatedObject):
+
     def __init__(self, name):
         super().__init__(name)
 
@@ -13,10 +14,11 @@ class Item(SimulatedObject):
 
 
 class Inventory(dict):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def add(self, item, amount):
+    def add(self, item, amount=1):
         """
         Add some number of an item to the inventory.
 
@@ -25,10 +27,9 @@ class Inventory(dict):
         :param amount: amount to add
         :type amount: int
         """
-        amount = self.get(item) + amount if item in self else amount
-        self[item] = amount
+        self[item] = self.get(item, 0) + amount
 
-    def remove(self, item, amount):
+    def remove(self, item, amount=1):
         """
         Remove some number of an item from the inventory
 
@@ -38,7 +39,7 @@ class Inventory(dict):
         :type amount: int
         """
         if item not in self or amount > self[item]:
-            raise Inventory.InsufficientInventory
+            raise InsufficientInventory
         self[item] -= amount
 
     def update(self, E=None, **F):
@@ -72,5 +73,24 @@ class Inventory(dict):
     def __str__(self):
         return reduce(lambda x, y: "%s\t%s: %s\n" % (x, y.name, self[y]), self, "{\n") + "}"
 
-    class InsufficientInventory(Exception):
-        pass
+
+class Wallet(object):
+
+    def __init__(self, gold):
+        self.gold = gold
+
+    def add(self, gold):
+        self.gold += gold
+
+    def remove(self, gold):
+        if self.gold < gold:
+            raise NotEnoughGold
+        self.gold -= gold
+
+
+class InsufficientInventory(Exception):
+    pass
+
+
+class NotEnoughGold(Exception):
+    pass

@@ -6,3 +6,6 @@ build/
 dist/
 
 *.pyc
+*.p
+
+venv/

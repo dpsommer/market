@@ -2,13 +2,14 @@ import unittest
 
 from market.data.items import Item
 from market.data.actors import Actor
-from market.util.data import MockData
+from market.test import MockDataTestCase
 
 
-class TestInventory(unittest.TestCase):
+class TestInventory(MockDataTestCase):
+
     def setUp(self):
-        self.test_item = Item.get('Test Item')
-        self.adventurer = Actor.get('John Doe')
+        self.test_item = Item('Test Item')
+        self.adventurer = Actor('John Doe')
 
     def test_inventory_persistence(self):
         """
@@ -19,12 +20,12 @@ class TestInventory(unittest.TestCase):
             3) ensures that an object held in memory matches marshaled objects
                 post-load by retaining the same value for test_item
         """
-        self.adventurer.add_to_inventory(self.test_item)
-        MockData.save()
-        MockData.load()
-        self.adventurer = Actor.get('John Doe')
-        self.adventurer.add_to_inventory(self.test_item)
-        assert self.adventurer.get_inventory().get(self.test_item) is 2
+        self.adventurer.inventory.add(self.test_item)
+        self.mock_data.save()
+        self.mock_data.load()
+        self.adventurer = Actor('John Doe')
+        self.adventurer.inventory.add(self.test_item)
+        assert self.adventurer.inventory.get(self.test_item) is 2
 
     def test_bulk_update(self):
         """
@@ -32,25 +33,22 @@ class TestInventory(unittest.TestCase):
         adds to totals rather than overriding them, and checks that new keys will be
         correctly created.
         """
-        self.adventurer.add_to_inventory(self.test_item)
-        potion = Item.get('Potion')
+        self.adventurer.inventory.add(self.test_item)
+        potion = Item('Potion')
         items = {self.test_item: 3, potion: 2}
-        self.adventurer.update_inventory(items)
-        inventory = self.adventurer.get_inventory()
+        self.adventurer.inventory.update(items)
+        inventory = self.adventurer.inventory
         assert inventory.get(self.test_item) is 4 and inventory.get(potion) is 2
 
     def test_item_removed(self):
         """
         Ensures that when an item's total reaches 0 in the inventory, it's removed.
         """
-        self.adventurer.add_to_inventory(self.test_item, 2)
-        self.adventurer.remove_from_inventory(self.test_item)
-        assert self.adventurer.get_inventory()
-        self.adventurer.remove_from_inventory(self.test_item)
-        assert not self.adventurer.get_inventory()
-
-    def tearDown(self):
-        MockData.clear()
+        self.adventurer.inventory.add(self.test_item, 2)
+        self.adventurer.inventory.remove(self.test_item)
+        assert self.adventurer.inventory
+        self.adventurer.inventory.remove(self.test_item)
+        assert not self.adventurer.inventory
 
 
 if __name__ == "__main__":
