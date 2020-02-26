@@ -55,9 +55,6 @@ class TestActors(MockDataTestCase):
         )
         assert buyer_gold == self.merchant.wallet.gold
 
-    def test_state_change(self):
-        pass
-
     def test_move_to_zone(self):
         forest = Zone('Forest', location=Point(0, 1))
         e = self.adventurer.move_to(forest)
