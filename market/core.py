@@ -79,18 +79,19 @@ class SimulatedObject(object):
     # XXX: is it possible that at some point we'll want multiple objects
     #      to be able to have the same name? should we be using uuid after all?
     def __init__(self, name, **kwargs):
-        self.name = name
+        self._name = name
 
     # XXX: this is way too complicated. It might be better to go back to the
     #      get() implementation than deal with all the extra boilerplate and
     #      exception cases this causes.
     def __new__(cls, name=None, *args, **kwargs):
+        name = name or cls.__default__
         if cls.is_loadable and name in Data.simulation_state[cls]:
             instance = Data.simulation_state[cls][name]
             instance.initialized = True
             return instance
         instance = super().__new__(cls)
-        instance.name = name  # necessary as pickle.load() doesn't call __init__
+        instance._name = name  # necessary as pickle.load() doesn't call __init__
         instance.initialized = False
         Data.simulation_state[cls][name] = instance
         return instance
@@ -98,6 +99,14 @@ class SimulatedObject(object):
     @classmethod
     def state_file_path(cls):
         return os.path.join(os.path.dirname(__file__), '%s.p' % cls.__name__)
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, name):
+        self._name = name
 
     def __getnewargs__(self):
         return self.name,
